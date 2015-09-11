@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F1EEBED1B9EBC5100EC861D /* libfft.c in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EEBEB1B9EBC5100EC861D /* libfft.c */; };
+		7F1EEBEF1B9EBD4900EC861D /* libportaudio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F1EEBEE1B9EBD4900EC861D /* libportaudio.dylib */; };
+		7F1EEC631BA2279B00EC861D /* ListenScore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EEC621BA2279B00EC861D /* ListenScore.m */; };
+		7F1EEC661BA227A900EC861D /* Listener.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EEC651BA227A900EC861D /* Listener.m */; };
+		7FB14CE51B9E9CE900F07851 /* pitch bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FB14CE41B9E9CE900F07851 /* pitch bg.png */; };
 		7FE4C8801B9E8AAD0087E0C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE4C87F1B9E8AAD0087E0C2 /* AppDelegate.m */; };
 		7FE4C8821B9E8AAD0087E0C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE4C8811B9E8AAD0087E0C2 /* main.m */; };
 		7FE4C8851B9E8AAD0087E0C2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE4C8841B9E8AAD0087E0C2 /* ViewController.m */; };
@@ -26,6 +31,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7F1EEBEB1B9EBC5100EC861D /* libfft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = libfft.c; sourceTree = "<group>"; };
+		7F1EEBEC1B9EBC5100EC861D /* libfft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libfft.h; sourceTree = "<group>"; };
+		7F1EEBEE1B9EBD4900EC861D /* libportaudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libportaudio.dylib; path = ../../../../usr/local/Cellar/portaudio/19.20140130/lib/libportaudio.dylib; sourceTree = "<group>"; };
+		7F1EEC611BA2279B00EC861D /* ListenScore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListenScore.h; sourceTree = "<group>"; };
+		7F1EEC621BA2279B00EC861D /* ListenScore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListenScore.m; sourceTree = "<group>"; };
+		7F1EEC641BA227A900EC861D /* Listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Listener.h; sourceTree = "<group>"; };
+		7F1EEC651BA227A900EC861D /* Listener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Listener.m; sourceTree = "<group>"; };
+		7FB14CE41B9E9CE900F07851 /* pitch bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "pitch bg.png"; path = "../../Pictures/pitch bg.png"; sourceTree = "<group>"; };
 		7FE4C8791B9E8AAD0087E0C2 /* Dino.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dino.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FE4C87D1B9E8AAD0087E0C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7FE4C87E1B9E8AAD0087E0C2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -45,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F1EEBEF1B9EBD4900EC861D /* libportaudio.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +75,8 @@
 		7FE4C8701B9E8AAD0087E0C2 = {
 			isa = PBXGroup;
 			children = (
+				7F1EEBEE1B9EBD4900EC861D /* libportaudio.dylib */,
+				7FB14CE41B9E9CE900F07851 /* pitch bg.png */,
 				7FE4C87B1B9E8AAD0087E0C2 /* Dino */,
 				7FE4C8921B9E8AAD0087E0C2 /* DinoTests */,
 				7FE4C87A1B9E8AAD0087E0C2 /* Products */,
@@ -86,6 +102,10 @@
 				7FE4C8861B9E8AAD0087E0C2 /* Images.xcassets */,
 				7FE4C8881B9E8AAD0087E0C2 /* Main.storyboard */,
 				7FE4C87C1B9E8AAD0087E0C2 /* Supporting Files */,
+				7F1EEC611BA2279B00EC861D /* ListenScore.h */,
+				7F1EEC621BA2279B00EC861D /* ListenScore.m */,
+				7F1EEC641BA227A900EC861D /* Listener.h */,
+				7F1EEC651BA227A900EC861D /* Listener.m */,
 			);
 			path = Dino;
 			sourceTree = "<group>";
@@ -95,6 +115,8 @@
 			children = (
 				7FE4C87D1B9E8AAD0087E0C2 /* Info.plist */,
 				7FE4C8811B9E8AAD0087E0C2 /* main.m */,
+				7F1EEBEB1B9EBC5100EC861D /* libfft.c */,
+				7F1EEBEC1B9EBC5100EC861D /* libfft.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -197,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7FE4C8871B9E8AAD0087E0C2 /* Images.xcassets in Resources */,
+				7FB14CE51B9E9CE900F07851 /* pitch bg.png in Resources */,
 				7FE4C88A1B9E8AAD0087E0C2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,8 +238,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F1EEBED1B9EBC5100EC861D /* libfft.c in Sources */,
+				7F1EEC661BA227A900EC861D /* Listener.m in Sources */,
 				7FE4C8851B9E8AAD0087E0C2 /* ViewController.m in Sources */,
 				7FE4C8821B9E8AAD0087E0C2 /* main.m in Sources */,
+				7F1EEC631BA2279B00EC861D /* ListenScore.m in Sources */,
 				7FE4C8801B9E8AAD0087E0C2 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,7 +280,7 @@
 		7FE4C8971B9E8AAD0087E0C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -285,6 +311,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -295,7 +322,7 @@
 		7FE4C8981B9E8AAD0087E0C2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -321,6 +348,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
@@ -332,8 +360,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/Cellar/portaudio/19.20140130/include,
+				);
 				INFOPLIST_FILE = Dino/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/portaudio/19.20140130/lib/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -343,8 +377,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/Cellar/portaudio/19.20140130/include,
+				);
 				INFOPLIST_FILE = Dino/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/portaudio/19.20140130/lib/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -404,6 +444,7 @@
 				7FE4C89B1B9E8AAD0087E0C2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7FE4C89C1B9E8AAD0087E0C2 /* Build configuration list for PBXNativeTarget "DinoTests" */ = {
 			isa = XCConfigurationList;
@@ -412,6 +453,7 @@
 				7FE4C89E1B9E8AAD0087E0C2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

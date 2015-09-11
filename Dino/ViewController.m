@@ -7,6 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "Listener.h"
+
+Listener * list;
 
 @implementation ViewController
 
@@ -22,4 +25,8 @@
     // Update the view, if already loaded.
 }
 
+
+- (IBAction)Listen:(id)sender {
+    list = [[Listener alloc] init];
+}
 @end

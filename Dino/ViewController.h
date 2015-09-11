@@ -9,6 +9,11 @@
 #import <Cocoa/Cocoa.h>
 
 @interface ViewController : NSViewController
+@property (strong, nonatomic) IBOutlet NSTextField *Accuracy;
+@property (strong, nonatomic) IBOutlet NSTextField *Score;
+@property (strong, nonatomic) IBOutlet NSScrollView *Notes;
+@property (strong, nonatomic) IBOutlet NSScrollView *Intervals;
+- (IBAction)Listen:(id)sender;
 
 
 @end
