@@ -23,6 +23,7 @@
 
 @property (strong, nonatomic) ListenScore * info;
 - (Listener*)init;
+- (ListenScore *)getInput;
 
 
 @end

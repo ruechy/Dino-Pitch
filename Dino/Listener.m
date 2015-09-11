@@ -13,6 +13,7 @@
 #define SAMPLE_RATE (8000)
 #define LOW_PASS_FILTER_PARAM (330)
 #define MINIMUM (1000000000.0)
+#define CENTS_SHARP_MULTIPLIER (1200)
 
 static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
@@ -120,6 +121,7 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
     *err = Pa_StartStream( *stream );
 }
 
+
 @implementation Listener
 - (Listener*)init
 {
@@ -133,6 +135,73 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
         self.info = [[ListenScore alloc] init];
     }
     return self;
+}
+
+- (ListenScore *) getInput{
+    self.info.numInputs++;
+    // read some data
+    self->err = Pa_ReadStream( stream, data, FFT_SIZE );
+    for( int j=0; j<FFT_SIZE; ++j ) {
+        self->data[j] = processSecondOrderFilter( self->data[j], self->mem1, self->a, self->b );
+        self->data[j] = processSecondOrderFilter( self->data[j], self->mem2, self->a, self->b );
+    }
+    applyWindow( self->window, self->data, FFT_SIZE );
+    
+    // do the fft
+    for( int j=0; j<FFT_SIZE; ++j )
+        self->datai[j] = 0;
+    applyfft( self->fft, self->data, self->datai, false );
+    
+    float maxVal = -1;
+    int maxIndex = -1;
+    for( int j=0; j<FFT_SIZE/2; ++j ) {
+        float v = self->data[j] * self->data[j] + self->datai[j] * self->datai[j] ;
+        if( v > maxVal ) {
+            maxVal = v;
+            maxIndex = j;
+        }
+    }
+    float freq = freqTable[maxIndex];
+    //find the nearest note:
+    int nearestNoteDelta = 0;
+    while( true ) {
+        if( nearestNoteDelta < maxIndex && noteNameTable[maxIndex-nearestNoteDelta] != NULL ) {
+            nearestNoteDelta = -nearestNoteDelta;
+            break;
+        } else if( nearestNoteDelta + maxIndex < FFT_SIZE && noteNameTable[maxIndex+nearestNoteDelta] != NULL ) {
+            break;
+        }
+        ++(nearestNoteDelta);
+    }
+    char * nearestNoteName = noteNameTable[maxIndex+nearestNoteDelta];
+    float nearestNotePitch = notePitchTable[maxIndex+nearestNoteDelta];
+    float centsSharp = CENTS_SHARP_MULTIPLIER * log( freq / nearestNotePitch ) / log( 2.0 );
+    [self updateInfo];
+    return self.info;
+}
+
+//updates accuracy/score/other pitch information based on frequency input
+- (void) updateInfo{
+    
+        if(freq < OCTAVE_ONE_START || freq > OCTAVE_EIGHT_END) return; //return if outside of the span of the 8 octaves
+        int octave = (log(freq/OCTAVE_ONE_START)/log(2.0)) + 1; //converts from Hz to octave
+        noteIndex *= octave; //puts note in respective octave
+        playedNotes[noteIndex]++;
+        if(prevNoteIndex > 0 && prevNoteIndex != noteIndex){ //if it's not the first note or the same note
+            playedIntervals[prevNoteIndex][noteIndex]++;
+        }
+        if(fabsf(centsSharp) < ACCURACY_THRESHOLD){
+            (*numAccuratep)++; //Count it as an accurate pitch if it's "close enough" in the range of the accuracy threshold
+        } else {
+            missedNotes[noteIndex]++;
+            if(prevNoteIndex > 0 && prevNoteIndex != noteIndex){ //if it's not the first note or the same note
+                missedIntervals[prevNoteIndex][noteIndex]++;
+            }
+        }
+        float singleInputScore = SCORETOTAL - fabsf(centsSharp);
+        *scorep += singleInputScore;
+    self.prevNoteIndex = noteIndex;
+    
 }
 
 @end
