@@ -180,6 +180,7 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
     self.info.nearestNoteName = self->noteNameTable[maxIndex+self.info.nearestNoteDelta];
     float nearestNotePitch = self->notePitchTable[maxIndex+self.info.nearestNoteDelta];
     self.info.centsSharp = CENTS_SHARP_MULTIPLIER * log( self.info.freq / nearestNotePitch ) / log( 2.0 );
+    self.info.noteIndex = (maxIndex+self.info.nearestNoteDelta) % NUMNOTES;
     [self updateInfo];
     return self.info;
 }
