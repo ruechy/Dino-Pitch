@@ -19,30 +19,30 @@ Listener * list;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    // Do any additional setup after loading the view.
+    list = [[Listener alloc] init];
 }
 
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
-
     // Update the view, if already loaded.
 }
 
 
 - (IBAction)Listen:(id)sender {
-    list = [[Listener alloc] init];
+    while(true){
     ListenScore * input;
     input = [list getInput];
-    
     if(input.numInputs != 0){
         float percentAccurate = (((float) input.numAccurate)/input.numInputs) * SCORETOTAL;
         [self.Accuracy setStringValue:[NSString stringWithFormat:@"%i %%", (int)percentAccurate]]; //print integer instead of float; integer is precise enough for this purpose
-         [self.Score setStringValue:[NSString stringWithFormat:@"%i / 100", (int)(input.score/input.numInputs)]]; //print integer instead of float; integer is precise enough for this purpose
-        printf("percentAccurate");
+        [self.Score setStringValue:[NSString stringWithFormat:@"%i / 100", (int)(input.score/input.numInputs)]]; //print integer instead of float; integer is precise enough for this purpose
         [self.NoteName setStringValue: [NSString stringWithFormat:@"%s", input.nearestNoteName]];
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantPast]];
+    }
     }
     
     //set intervals at end
 }
+
+
 @end
