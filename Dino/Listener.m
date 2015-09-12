@@ -14,6 +14,10 @@
 #define LOW_PASS_FILTER_PARAM (330)
 #define MINIMUM (1000000000.0)
 #define CENTS_SHARP_MULTIPLIER (1200)
+#define OCTAVE_ONE_START (31.7855) //halfway between B0 and C1
+#define OCTAVE_EIGHT_END (8137.075) //halway between B8 and C9
+#define ACCURACY_THRESHOLD (10.0)
+#define SCORETOTAL (100)
 
 static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
@@ -161,21 +165,21 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
             maxIndex = j;
         }
     }
-    float freq = freqTable[maxIndex];
+    self.info.freq = freqTable[maxIndex];
     //find the nearest note:
-    int nearestNoteDelta = 0;
+    self.info.nearestNoteDelta = 0;
     while( true ) {
-        if( nearestNoteDelta < maxIndex && noteNameTable[maxIndex-nearestNoteDelta] != NULL ) {
-            nearestNoteDelta = -nearestNoteDelta;
+        if( self.info.nearestNoteDelta < maxIndex && self->noteNameTable[maxIndex-self.info.nearestNoteDelta] != NULL ) {
+            self.info.nearestNoteDelta = -self.info.nearestNoteDelta;
             break;
-        } else if( nearestNoteDelta + maxIndex < FFT_SIZE && noteNameTable[maxIndex+nearestNoteDelta] != NULL ) {
+        } else if( self.info.nearestNoteDelta + maxIndex < FFT_SIZE && self->noteNameTable[maxIndex+self.info.nearestNoteDelta] != NULL ) {
             break;
         }
-        ++(nearestNoteDelta);
+        ++(self.info.nearestNoteDelta);
     }
-    char * nearestNoteName = noteNameTable[maxIndex+nearestNoteDelta];
-    float nearestNotePitch = notePitchTable[maxIndex+nearestNoteDelta];
-    float centsSharp = CENTS_SHARP_MULTIPLIER * log( freq / nearestNotePitch ) / log( 2.0 );
+    self.info.nearestNoteName = self->noteNameTable[maxIndex+self.info.nearestNoteDelta];
+    float nearestNotePitch = self->notePitchTable[maxIndex+self.info.nearestNoteDelta];
+    self.info.centsSharp = CENTS_SHARP_MULTIPLIER * log( self.info.freq / nearestNotePitch ) / log( 2.0 );
     [self updateInfo];
     return self.info;
 }
@@ -183,24 +187,24 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
 //updates accuracy/score/other pitch information based on frequency input
 - (void) updateInfo{
     
-        if(freq < OCTAVE_ONE_START || freq > OCTAVE_EIGHT_END) return; //return if outside of the span of the 8 octaves
-        int octave = (log(freq/OCTAVE_ONE_START)/log(2.0)) + 1; //converts from Hz to octave
-        noteIndex *= octave; //puts note in respective octave
-        playedNotes[noteIndex]++;
-        if(prevNoteIndex > 0 && prevNoteIndex != noteIndex){ //if it's not the first note or the same note
-            playedIntervals[prevNoteIndex][noteIndex]++;
+        if(self.info.freq < OCTAVE_ONE_START || self.info.freq > OCTAVE_EIGHT_END) return; //return if outside of the span of the 8 octaves
+        int octave = (log(self.info.freq/OCTAVE_ONE_START)/log(2.0)) + 1; //converts from Hz to octave
+        self.info.noteIndex *= octave; //puts note in respective octave
+        self.info.playedNotes[self.info.noteIndex]++;
+        if(self.info.prevNoteIndex > 0 && self.info.prevNoteIndex != self.info.noteIndex){ //if it's not the first note or the same note
+            self.info.playedIntervals[self.info.prevNoteIndex][self.info.noteIndex]++;
         }
-        if(fabsf(centsSharp) < ACCURACY_THRESHOLD){
-            (*numAccuratep)++; //Count it as an accurate pitch if it's "close enough" in the range of the accuracy threshold
+        if(fabsf(self.info.centsSharp) < ACCURACY_THRESHOLD){
+            (self.info.numAccurate)++; //Count it as an accurate pitch if it's "close enough" in the range of the accuracy threshold
         } else {
-            missedNotes[noteIndex]++;
-            if(prevNoteIndex > 0 && prevNoteIndex != noteIndex){ //if it's not the first note or the same note
-                missedIntervals[prevNoteIndex][noteIndex]++;
+            self.info.missedNotes[self.info.noteIndex]++;
+            if(self.info.prevNoteIndex > 0 && self.info.prevNoteIndex != self.info.noteIndex){ //if it's not the first note or the same note
+               self.info.missedIntervals[self.info.prevNoteIndex][self.info.noteIndex]++;
             }
         }
-        float singleInputScore = SCORETOTAL - fabsf(centsSharp);
-        *scorep += singleInputScore;
-    self.prevNoteIndex = noteIndex;
+        float singleInputScore = SCORETOTAL - fabsf(self.info.centsSharp);
+        self.info.score += singleInputScore;
+        self.info.prevNoteIndex = self.info.noteIndex;
     
 }
 

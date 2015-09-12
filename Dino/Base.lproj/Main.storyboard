@@ -257,13 +257,19 @@
                                     <action selector="Listen:" target="XfG-lQ-9wD" id="S3q-D2-nKF"/>
                                 </connections>
                             </button>
+                            <colorWell fixedFrame="YES" bordered="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sah-SM-EQT">
+                                <rect key="frame" x="111" y="170" width="69" height="14"/>
+                                <color key="color" red="0.9960784912109375" green="0.99215692281723022" blue="0.99215692281723022" alpha="1" colorSpace="deviceRGB"/>
+                            </colorWell>
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="Accuracy" destination="b2l-fk-wLo" id="UpV-c0-hpy"/>
-                        <outlet property="Intervals" destination="Aj1-RH-XVX" id="pUn-Re-d9V"/>
-                        <outlet property="Notes" destination="u1t-ip-Jr6" id="3N4-Zs-T0T"/>
-                        <outlet property="Score" destination="KwN-Rh-Rvl" id="eJm-Nc-LN7"/>
+                        <outlet property="Accuracy" destination="b2l-fk-wLo" id="dWE-lx-dwb"/>
+                        <outlet property="Intervals" destination="Aj1-RH-XVX" id="yi1-5P-6bE"/>
+                        <outlet property="NoteName" destination="Cqx-p5-0bq" id="pzt-mR-Mru"/>
+                        <outlet property="Notes" destination="u1t-ip-Jr6" id="dub-fN-Z01"/>
+                        <outlet property="Pitch" destination="sah-SM-EQT" id="QJX-fp-HL6"/>
+                        <outlet property="Score" destination="KwN-Rh-Rvl" id="oeu-6A-fOe"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
