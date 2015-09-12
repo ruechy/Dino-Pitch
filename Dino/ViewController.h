@@ -11,8 +11,9 @@
 @interface ViewController : NSViewController
 @property (weak) IBOutlet NSTextField *Accuracy;
 @property (weak) IBOutlet NSTextField *Score;
-@property (weak) IBOutlet NSScrollView *Notes;
-@property (weak) IBOutlet NSScrollView *Intervals;
+@property (weak) IBOutlet NSTextField *Notes;
+@property (weak) IBOutlet NSTextField *Intervals;
+
 @property (weak) IBOutlet NSTextField *NoteName;
 @property (weak) IBOutlet NSColorWell *Pitch;
 

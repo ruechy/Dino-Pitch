@@ -11,6 +11,10 @@
 #import "ListenScore.h"
 
 #define SCORETOTAL 100
+#define MISS_THRESHOLD (.5)
+#define NUMNOTES (12)
+#define NUMOCTAVES (8)
+static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
 Listener * list;
 
@@ -27,6 +31,41 @@ Listener * list;
     // Update the view, if already loaded.
 }
 
+//Prints the names of the notes that the user missed more than a specified percentage of the time. Returns true
+//if there are no frequently missed notes.
+- (bool)printNotes:(ListenScore *) input {
+    bool perfect = true; //no missed notes
+    for(int i = 0; i < NUMNOTES * NUMOCTAVES; i++){
+        if(input.playedNotes[i]){
+            float missed = (float) input.missedNotes[i] / input.playedNotes[i];
+            if(missed > MISS_THRESHOLD){
+                //print integer instead of float; integer is precise enough for this purpose
+                [self.Notes setStringValue:[NSString stringWithFormat:@"%s%d (%d %%)\n", NOTES[i % NUMNOTES],(i / NUMOCTAVES) + 1, (int)(missed * SCORETOTAL)]];
+                perfect = false;
+            }
+        }
+    }
+    return perfect;
+}
+
+//Prints the interval jumps that the user missed more than a specified percentage of the time. Returns true
+//if there are no frequently missed intervals.
+- (bool)printIntervals:(ListenScore *) input {
+    bool perfect = true; //no missed intervals
+    for(int i = 0; i < NUMNOTES * NUMOCTAVES; i++){
+        for(int j = 0; j < NUMNOTES * NUMOCTAVES; j++){
+            if(input.playedIntervals[i][j]){
+                float missed = (float) input.missedIntervals[i][j] / input.playedIntervals[i][j];
+                if(missed > MISS_THRESHOLD){
+                    //print integer instead of float; integer is precise enough for this purpose
+                    [self.Intervals setStringValue:[NSString stringWithFormat:@"%s%d -> %s%d (%d %%)\n", NOTES[i % NUMNOTES], (i / NUMOCTAVES) + 1, NOTES[j % NUMNOTES], (j / NUMOCTAVES) + 1, (int)(missed * SCORETOTAL)]];
+                    perfect = false;
+                }
+            }
+        }
+        }
+    return perfect;
+}
 
 - (IBAction)Listen:(id)sender {
     while(true){
@@ -38,8 +77,12 @@ Listener * list;
         [self.Score setStringValue:[NSString stringWithFormat:@"%i / 100", (int)(input.score/input.numInputs)]]; //print integer instead of float; integer is precise enough for this purpose
         [self.NoteName setStringValue: [NSString stringWithFormat:@"%s", input.nearestNoteName]];
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantPast]];
+        if([self printNotes: input]) [self.Notes setStringValue:@"None! Nice job! :D"];//if this is true, it means the user didn't frequently miss any notes
+        if([self printIntervals: input]) [self.Intervals setStringValue:@"None! Nice job! :D"]; //if this is true, it means the user didn't frequently miss any intervals
+        
     }
-    }
+    
+}
     
     //set intervals at end
 }
