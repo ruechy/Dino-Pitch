@@ -13,7 +13,7 @@
 @property (weak) IBOutlet NSTextField *Score;
 @property (weak) IBOutlet NSTextField *Notes;
 @property (weak) IBOutlet NSTextField *Intervals;
-
+@property (weak) IBOutlet NSButton *Frequency;
 @property (weak) IBOutlet NSTextField *NoteName;
 @property (weak) IBOutlet NSColorWell *Pitch;
 

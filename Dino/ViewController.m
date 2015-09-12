@@ -12,8 +12,6 @@
 
 #define SCORETOTAL 100
 #define MISS_THRESHOLD (.5)
-#define NUMNOTES (12)
-#define NUMOCTAVES (8)
 static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
 Listener * list;
@@ -68,6 +66,7 @@ Listener * list;
 }
 
 - (IBAction)Listen:(id)sender {
+    int origin = self.Frequency.frame.origin.y;
     while(true){
     ListenScore * input;
     input = [list getInput];
@@ -79,7 +78,9 @@ Listener * list;
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantPast]];
         if([self printNotes: input]) [self.Notes setStringValue:@"None! Nice job! :D"];//if this is true, it means the user didn't frequently miss any notes
         if([self printIntervals: input]) [self.Intervals setStringValue:@"None! Nice job! :D"]; //if this is true, it means the user didn't frequently miss any intervals
-        
+        CGRect frame = self.Frequency.frame;
+        frame.origin.y = origin + (input.centsSharp * 1.3);
+        self.Frequency.frame = frame;
     }
     
 }
