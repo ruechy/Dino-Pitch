@@ -64,7 +64,7 @@ void initMostMissed(int* mostMissed){
     }
     for(int i = 0; i < 5; i++){
         if(mostMissed[i] > 0){
-            [self.Notes setStringValue:[NSString stringWithFormat:@"%s%d (%d %%)\n%@", NOTES[mostMissed[i] % NUMNOTES],(mostMissed[i] / NUMOCTAVES) + 1, (int)(missed * SCORETOTAL), self.Notes.stringValue]]; //print integer instead of float; integer is precise enough for this purpose
+            [self.Notes setStringValue:[NSString stringWithFormat:@"%s%d (%d %%)\n%@", NOTES[mostMissed[i] % NUMNOTES],(mostMissed[i] / NUMOCTAVES) + 1, SCORETOTAL - (int)(((float) input.missedNotes[mostMissed[i]] / input.playedNotes[mostMissed[i]]) * SCORETOTAL), self.Notes.stringValue]]; //print integer instead of float; integer is precise enough for this purpose
         }
     }
     return perfect;
@@ -84,18 +84,18 @@ void initMostMissed(int* mostMissed){
     for(int i = 0; i < NUMNOTES * NUMOCTAVES; i++){
         for(int l = 0; l < NUMNOTES * NUMOCTAVES; l++){
         if(input.playedIntervals[i][l]){
-            missed = (float) input.missedNotes[i] / input.playedNotes[i];
+            missed = (float) input.missedIntervals[i][l] / input.playedIntervals[i][l];
             if(missed > MISS_THRESHOLD){
                 for(int j = 0; j < 5; j++){
-                    if(input.playedNotes[i] > mostMissedNPlayed[j]){
+                    if(input.playedIntervals[i][l] > mostMissedNPlayed[j]){
                         for(int k = 4; k > j; k--){
                             mostMissedNoteOne[k] = mostMissedNoteOne[k-1];
                             mostMissedNoteTwo[k] = mostMissedNoteTwo[k-1];
-                            mostMissedNPlayed[k] = input.playedNotes[k-1];
+                            mostMissedNPlayed[k] = mostMissedNPlayed[k-1];
                         }
                         mostMissedNoteOne[j] = i;
-                        mostMissedNoteTwo[j] = i;
-                        mostMissedNPlayed[j] = input.playedNotes[i];
+                        mostMissedNoteTwo[j] = l;
+                        mostMissedNPlayed[j] = input.playedIntervals[i][l];
                         break;
                     }
                 }
@@ -106,7 +106,8 @@ void initMostMissed(int* mostMissed){
     }
     for(int i = 0; i < 5; i++){
         if(mostMissedNoteOne[i] > 0){
-            [self.Intervals setStringValue:[NSString stringWithFormat:@"%s%d -> %s%d (%d %%)\n%@", NOTES[mostMissedNoteOne[i] % NUMNOTES], (mostMissedNoteOne[i] / NUMOCTAVES) + 1, NOTES[mostMissedNoteTwo[i] % NUMNOTES], (mostMissedNoteTwo[i] / NUMOCTAVES) + 1, (int)(missed * SCORETOTAL), self.Intervals.stringValue]];//print integer instead of float; integer is precise enough for this purpose
+            missed = (float) input.missedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]] / input.playedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]];
+            [self.Intervals setStringValue:[NSString stringWithFormat:@"%s%d -> %s%d (%d %%)\n%@", NOTES[mostMissedNoteOne[i] % NUMNOTES], (mostMissedNoteOne[i] / NUMOCTAVES) + 1, NOTES[mostMissedNoteTwo[i] % NUMNOTES], (mostMissedNoteTwo[i] / NUMOCTAVES) + 1, SCORETOTAL -(int)(missed * SCORETOTAL), self.Intervals.stringValue]];//print integer instead of float; integer is precise enough for this purpose
         }
     }
     return perfect;
