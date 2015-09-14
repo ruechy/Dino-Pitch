@@ -16,6 +16,7 @@ static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", 
 
 Listener * list;
 
+//Initialize every index in the most missed array to -1. 
 void initMostMissed(int* mostMissed){
     for(int i = 0; i < 5; i++){
         mostMissed[i] = -1;
@@ -31,7 +32,6 @@ void initMostMissed(int* mostMissed){
 
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
-    // Update the view, if already loaded.
 }
 
 //Prints the names of the notes that the user missed more than a specified percentage of the time. Returns true
@@ -44,7 +44,7 @@ void initMostMissed(int* mostMissed){
     initMostMissed(mostMissed);
     float missed = 0.;
     for(int i = 0; i < NUMNOTES * NUMOCTAVES; i++){
-        if(input.playedNotes[i]){
+        if(input.playedNotes[i] > 5){
             missed = (float) input.missedNotes[i] / input.playedNotes[i];
             if(missed > MISS_THRESHOLD){
                 for(int j = 0; j < 5; j++){
@@ -64,10 +64,20 @@ void initMostMissed(int* mostMissed){
     }
     for(int i = 0; i < 5; i++){
         if(mostMissed[i] > 0){
-            [self.Notes setStringValue:[NSString stringWithFormat:@"%s%d (%d %%)\n%@", NOTES[mostMissed[i] % NUMNOTES],(mostMissed[i] / NUMOCTAVES) + 1, SCORETOTAL - (int)(((float) input.missedNotes[mostMissed[i]] / input.playedNotes[mostMissed[i]]) * SCORETOTAL), self.Notes.stringValue]]; //print integer instead of float; integer is precise enough for this purpose
+            [self.Notes setStringValue:[NSString stringWithFormat:@"%s%d (%d %%)\n%@", NOTES[mostMissed[i] / NUMNOTES],(mostMissed[i] / NUMOCTAVES) + 1, SCORETOTAL - (int)(((float) input.missedNotes[mostMissed[i]] / input.playedNotes[mostMissed[i]]) * SCORETOTAL), self.Notes.stringValue]]; //print integer instead of float; integer is precise enough for this purpose
         }
     }
     return perfect;
+}
+
+
+- (void)printTopFive:(int*) mostMissedNoteOne: (int*) mostMissedNoteTwo: (ListenScore *) input{
+    for(int i = 0; i < 5; i++){
+        if(mostMissedNoteOne[i] > 0){
+            float missed = (float) input.missedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]] / input.playedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]];
+            [self.Intervals setStringValue:[NSString stringWithFormat:@"%s%d -> %s%d (%d %%)\n%@", NOTES[mostMissedNoteOne[i] / NUMNOTES], (mostMissedNoteOne[i] / NUMOCTAVES) + 1, NOTES[mostMissedNoteTwo[i] / NUMNOTES], (mostMissedNoteTwo[i] / NUMOCTAVES) + 1, SCORETOTAL -(int)(missed * SCORETOTAL), self.Intervals.stringValue]];//print integer instead of float; integer is precise enough for this purpose
+        }
+    }
 }
 
 //Prints the interval jumps that the user missed more than a specified percentage of the time. Returns true
@@ -83,7 +93,7 @@ void initMostMissed(int* mostMissed){
     float missed = 0.;
     for(int i = 0; i < NUMNOTES * NUMOCTAVES; i++){
         for(int l = 0; l < NUMNOTES * NUMOCTAVES; l++){
-        if(input.playedIntervals[i][l]){
+        if(input.playedIntervals[i][l] > 5){
             missed = (float) input.missedIntervals[i][l] / input.playedIntervals[i][l];
             if(missed > MISS_THRESHOLD){
                 for(int j = 0; j < 5; j++){
@@ -104,12 +114,7 @@ void initMostMissed(int* mostMissed){
         }
         }
     }
-    for(int i = 0; i < 5; i++){
-        if(mostMissedNoteOne[i] > 0){
-            missed = (float) input.missedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]] / input.playedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]];
-            [self.Intervals setStringValue:[NSString stringWithFormat:@"%s%d -> %s%d (%d %%)\n%@", NOTES[mostMissedNoteOne[i] % NUMNOTES], (mostMissedNoteOne[i] / NUMOCTAVES) + 1, NOTES[mostMissedNoteTwo[i] % NUMNOTES], (mostMissedNoteTwo[i] / NUMOCTAVES) + 1, SCORETOTAL -(int)(missed * SCORETOTAL), self.Intervals.stringValue]];//print integer instead of float; integer is precise enough for this purpose
-        }
-    }
+    [self printTopFive: mostMissedNoteOne: mostMissedNoteTwo: input];
     return perfect;
 
 }

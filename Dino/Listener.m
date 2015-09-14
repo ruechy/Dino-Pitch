@@ -2,9 +2,21 @@
 //  Listener.m
 //  Dino
 //
-//  Created by Lucy  on 9/10/15.
-//  Copyright (c) 2015 Lucy. All rights reserved.
 //
+
+/* Built on top of:
+ * chromatic guitar tuner
+ *
+ * Copyright (C) 2012 by Bjorn Roche
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose and without fee is hereby granted, provided
+ * that the above copyright notice appear in all copies and that both that
+ * copyright notice and this permission notice appear in supporting
+ * documentation.  This software is provided "as is" without express or
+ * implied warranty.
+ *
+ */
 
 #import "Listener.h"
 #import "libfft.h"
@@ -190,6 +202,7 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
     
         if(self.info.freq < OCTAVE_ONE_START || self.info.freq > OCTAVE_EIGHT_END) return; //return if outside of the span of the 8 octaves
         int octave = (log(self.info.freq/OCTAVE_ONE_START)/log(2.0)) + 1; //converts from Hz to octave
+    printf("%d", octave);
         self.info.noteIndex *= octave; //puts note in respective octave
         self.info.playedNotes[self.info.noteIndex]++;
         if(self.info.prevNoteIndex > 0 && self.info.prevNoteIndex != self.info.noteIndex){ //if it's not the first note or the same note
