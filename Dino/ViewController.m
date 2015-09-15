@@ -118,6 +118,7 @@ void initMostMissed(int* mostMissed){
 
 }
 
+//Listens to microphone input and graphically updates pitch information (closest pitch, degree of pitchiness) as well as historical data (percent accuracy of all inputs received, accuracy score, and problem notes/intervals)
 - (void)generatePitchInfo {
     int origin = self.Frequency.frame.origin.y;
     if(button){
@@ -139,7 +140,7 @@ void initMostMissed(int* mostMissed){
     }
 }
 
-//Listens to a single microphone input and graphically updates pitch information (closest pitch, degree of pitchiness) as well as historical data (percent accuracy of all inputs received, accuracy score, and problem notes/intervals)
+//Waits for a button press to start and stop listening to microphone input to generate pitch information
 - (IBAction)Listen:(id)sender {
     button = !button;
     if(button){
