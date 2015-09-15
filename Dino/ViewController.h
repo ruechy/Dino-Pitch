@@ -1,9 +1,6 @@
 //
 //  ViewController.h
-//  Dino
-//
-//  Created by Lucy  on 9/7/15.
-//  Copyright (c) 2015 Lucy. All rights reserved.
+//  Provides a graphical display for information gathered about pitches played into the microphone.
 //
 
 #import <Cocoa/Cocoa.h>

@@ -1,9 +1,5 @@
 //
 //  ViewController.m
-//  Dino
-//
-//  Created by Lucy  on 9/7/15.
-//  Copyright (c) 2015 Lucy. All rights reserved.
 //
 
 #import "ViewController.h"
@@ -12,6 +8,8 @@
 
 #define SCORETOTAL 100
 #define MISS_THRESHOLD (.5)
+#define MISSED_ARRAY_SIZE (5)
+#define GRAPHICAL_MULTIPLIER (1.3)
 static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
 Listener * list;
@@ -25,6 +23,7 @@ void initMostMissed(int* mostMissed){
 
 @implementation ViewController
 
+//Initializes a listener object when the view first loads
 - (void)viewDidLoad {
     [super viewDidLoad];
     list = [[Listener alloc] init];
@@ -34,7 +33,7 @@ void initMostMissed(int* mostMissed){
     [super setRepresentedObject:representedObject];
 }
 
-//Prints the names of the notes that the user missed more than a specified percentage of the time. Returns true
+//Prints the names of the most frequently played notes that the user missed more than a specified percentage of the time. Returns true
 //if there are no frequently missed notes.
 - (bool)printNotes:(ListenScore *) input {
     [self.Notes setStringValue: @""];
@@ -44,12 +43,12 @@ void initMostMissed(int* mostMissed){
     initMostMissed(mostMissed);
     float missed = 0.;
     for(int i = 0; i < NUMNOTES * NUMOCTAVES; i++){
-        if(input.playedNotes[i] > 5){
+        if(input.playedNotes[i] > MISSED_ARRAY_SIZE){
             missed = (float) input.missedNotes[i] / input.playedNotes[i];
             if(missed > MISS_THRESHOLD){
-                for(int j = 0; j < 5; j++){
+                for(int j = 0; j < MISSED_ARRAY_SIZE; j++){
                     if(input.playedNotes[i] > mostMissedNPlayed[j]){
-                        for(int k = 4; k > j; k--){
+                        for(int k = MISSED_ARRAY_SIZE - 1; k > j; k--){
                             mostMissed[k] = mostMissed[k-1];
                             mostMissedNPlayed[k] = input.playedNotes[k-1];
                         }
@@ -62,7 +61,7 @@ void initMostMissed(int* mostMissed){
             }
         }
     }
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < MISSED_ARRAY_SIZE; i++){
         if(mostMissed[i] > 0){
             [self.Notes setStringValue:[NSString stringWithFormat:@"%s%d (%d %%)\n%@", NOTES[mostMissed[i] / NUMNOTES],(mostMissed[i] / NUMOCTAVES) + 1, SCORETOTAL - (int)(((float) input.missedNotes[mostMissed[i]] / input.playedNotes[mostMissed[i]]) * SCORETOTAL), self.Notes.stringValue]]; //print integer instead of float; integer is precise enough for this purpose
         }
@@ -70,9 +69,9 @@ void initMostMissed(int* mostMissed){
     return perfect;
 }
 
-
-- (void)printTopFive:(int*) mostMissedNoteOne: (int*) mostMissedNoteTwo: (ListenScore *) input{
-    for(int i = 0; i < 5; i++){
+//Prints the top most frequently played missed intervals.
+- (void)printTop:(int*) mostMissedNoteOne: (int*) mostMissedNoteTwo: (ListenScore *) input{
+    for(int i = 0; i < MISSED_ARRAY_SIZE; i++){
         if(mostMissedNoteOne[i] > 0){
             float missed = (float) input.missedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]] / input.playedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]];
             [self.Intervals setStringValue:[NSString stringWithFormat:@"%s%d -> %s%d (%d %%)\n%@", NOTES[mostMissedNoteOne[i] / NUMNOTES], (mostMissedNoteOne[i] / NUMOCTAVES) + 1, NOTES[mostMissedNoteTwo[i] / NUMNOTES], (mostMissedNoteTwo[i] / NUMOCTAVES) + 1, SCORETOTAL -(int)(missed * SCORETOTAL), self.Intervals.stringValue]];//print integer instead of float; integer is precise enough for this purpose
@@ -80,8 +79,7 @@ void initMostMissed(int* mostMissed){
     }
 }
 
-//Prints the interval jumps that the user missed more than a specified percentage of the time. Returns true
-//if there are no frequently missed intervals.
+//Prints the most frequently played interval jumps that the user missed more than a specified percentage of the time. Returns true if there are no frequently missed intervals.
 - (bool)printIntervals:(ListenScore *) input {
     [self.Intervals setStringValue: @""];
     bool perfect = true; //no missed notes
@@ -93,12 +91,12 @@ void initMostMissed(int* mostMissed){
     float missed = 0.;
     for(int i = 0; i < NUMNOTES * NUMOCTAVES; i++){
         for(int l = 0; l < NUMNOTES * NUMOCTAVES; l++){
-        if(input.playedIntervals[i][l] > 5){
+        if(input.playedIntervals[i][l] > MISSED_ARRAY_SIZE){
             missed = (float) input.missedIntervals[i][l] / input.playedIntervals[i][l];
             if(missed > MISS_THRESHOLD){
-                for(int j = 0; j < 5; j++){
+                for(int j = 0; j < MISSED_ARRAY_SIZE; j++){
                     if(input.playedIntervals[i][l] > mostMissedNPlayed[j]){
-                        for(int k = 4; k > j; k--){
+                        for(int k = MISSED_ARRAY_SIZE - 1; k > j; k--){
                             mostMissedNoteOne[k] = mostMissedNoteOne[k-1];
                             mostMissedNoteTwo[k] = mostMissedNoteTwo[k-1];
                             mostMissedNPlayed[k] = mostMissedNPlayed[k-1];
@@ -114,11 +112,12 @@ void initMostMissed(int* mostMissed){
         }
         }
     }
-    [self printTopFive: mostMissedNoteOne: mostMissedNoteTwo: input];
+    [self printTop: mostMissedNoteOne: mostMissedNoteTwo: input];
     return perfect;
 
 }
 
+//Listens to a single microphone input and graphically updates pitch information (closest pitch, degree of pitchiness) as well as historical data (percent accuracy of all inputs received, accuracy score, and problem notes/intervals)
 - (IBAction)Listen:(id)sender {
     int origin = self.Frequency.frame.origin.y;
     while(true){
@@ -133,13 +132,10 @@ void initMostMissed(int* mostMissed){
         if([self printNotes: input]) [self.Notes setStringValue:@"None! Nice job! :D"];//if this is true, it means the user didn't frequently miss any notes
         if([self printIntervals: input]) [self.Intervals setStringValue:@"None! Nice job! :D"]; //if this is true, it means the user didn't frequently miss any intervals
         CGRect frame = self.Frequency.frame;
-        frame.origin.y = origin + (input.centsSharp * 1.3);
+        frame.origin.y = origin + (input.centsSharp * GRAPHICAL_MULTIPLIER); //Shifts the pitch bar by degree of pitchiness
         self.Frequency.frame = frame;
+        }
     }
-    
-}
-    
-    //set intervals at end
 }
 
 

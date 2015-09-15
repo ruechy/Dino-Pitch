@@ -1,9 +1,6 @@
 //
 //  ListenScore.m
-//  Dino
 //
-//  Created by Lucy  on 9/10/15.
-//  Copyright (c) 2015 Lucy. All rights reserved.
 //
 
 #import "ListenScore.h"
@@ -20,6 +17,7 @@ void initNotesPlayedArrays(int * playedNotes, int * missedNotes, int playedInter
     }
 }
 
+//Initializes information held in ListenScore
 @implementation ListenScore
 - (ListenScore *)init {
     self = [super init];
@@ -28,12 +26,16 @@ void initNotesPlayedArrays(int * playedNotes, int * missedNotes, int playedInter
     }
     return self;
 }
+
+//Getters
 - (int *)missedNotes {
     return missedNotes;
 }
 - (int *)playedNotes {
     return playedNotes;
 }
+
+//Setters
 - (int (*)[NUMNOTES*NUMOCTAVES])playedIntervals {
     return playedIntervals;
 }

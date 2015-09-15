@@ -1,9 +1,9 @@
 //
 //  ListenScore.h
-//  Dino
-//
-//  Created by Lucy  on 9/10/15.
-//  Copyright (c) 2015 Lucy. All rights reserved.
+//  Holds information about the frequency of the last microphone input received, its distance from the
+//  closest note, and the name of the closest note. Also holds historical information about the duration of
+//  the microphone input, such as the percent of pitches that have been hit accurately, and the number of times
+//  a given pitch/interval has been missed.
 //
 
 #import <Foundation/Foundation.h>

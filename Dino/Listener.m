@@ -1,7 +1,5 @@
 //
 //  Listener.m
-//  Dino
-//
 //
 
 /* Built on top of:
@@ -137,7 +135,8 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
     *err = Pa_StartStream( *stream );
 }
 
-
+//Initializes the iterms needed to listen to microphone input and determine closest pitch and
+//degree of pitchiness
 @implementation Listener
 - (Listener*)init
 {
