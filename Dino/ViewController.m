@@ -10,13 +10,14 @@
 #define MISS_THRESHOLD (.5)
 #define MISSED_ARRAY_SIZE (5)
 #define GRAPHICAL_MULTIPLIER (1.3)
+#define INPUT_THRESHOLD (3) //number of inputs recorded to be eligible for a problem note/interval
 static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
 Listener * list;
 
 //Initialize every index in the most missed array to -1. 
 void initMostMissed(int* mostMissed){
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < MISSED_ARRAY_SIZE; i++){
         mostMissed[i] = -1;
     }
 }
@@ -38,12 +39,12 @@ void initMostMissed(int* mostMissed){
 - (bool)printNotes:(ListenScore *) input {
     [self.Notes setStringValue: @""];
     bool perfect = true; //no missed notes
-    int mostMissed[5]; //keeps track of indices of top 5 most missed notes
-    int mostMissedNPlayed[5]; //keeps track of how often each of the most missed notes have been played
+    int mostMissed[MISSED_ARRAY_SIZE]; //keeps track of indices of top most missed notes
+    int mostMissedNPlayed[MISSED_ARRAY_SIZE]; //keeps track of how often each of the most missed notes have been played
     initMostMissed(mostMissed);
     float missed = 0.;
     for(int i = 0; i < NUMNOTES * NUMOCTAVES; i++){
-        if(input.playedNotes[i] > MISSED_ARRAY_SIZE){
+        if(input.playedNotes[i] > INPUT_THRESHOLD){
             missed = (float) input.missedNotes[i] / input.playedNotes[i];
             if(missed > MISS_THRESHOLD){
                 for(int j = 0; j < MISSED_ARRAY_SIZE; j++){
@@ -63,7 +64,7 @@ void initMostMissed(int* mostMissed){
     }
     for(int i = 0; i < MISSED_ARRAY_SIZE; i++){
         if(mostMissed[i] > 0){
-            [self.Notes setStringValue:[NSString stringWithFormat:@"%s%d (%d %%)\n%@", NOTES[mostMissed[i] / NUMNOTES],(mostMissed[i] / NUMOCTAVES) + 1, SCORETOTAL - (int)(((float) input.missedNotes[mostMissed[i]] / input.playedNotes[mostMissed[i]]) * SCORETOTAL), self.Notes.stringValue]]; //print integer instead of float; integer is precise enough for this purpose
+            [self.Notes setStringValue:[NSString stringWithFormat:@"%s%d (%d %%)\n%@", NOTES[mostMissed[i] % NUMNOTES],(mostMissed[i] / NUMNOTES) + 1, SCORETOTAL - (int)(((float) input.missedNotes[mostMissed[i]] / input.playedNotes[mostMissed[i]]) * SCORETOTAL), self.Notes.stringValue]]; //print integer instead of float; integer is precise enough for this purpose
         }
     }
     return perfect;
@@ -74,7 +75,7 @@ void initMostMissed(int* mostMissed){
     for(int i = 0; i < MISSED_ARRAY_SIZE; i++){
         if(mostMissedNoteOne[i] > 0){
             float missed = (float) input.missedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]] / input.playedIntervals[mostMissedNoteOne[i]][mostMissedNoteTwo[i]];
-            [self.Intervals setStringValue:[NSString stringWithFormat:@"%s%d -> %s%d (%d %%)\n%@", NOTES[mostMissedNoteOne[i] / NUMNOTES], (mostMissedNoteOne[i] / NUMOCTAVES) + 1, NOTES[mostMissedNoteTwo[i] / NUMNOTES], (mostMissedNoteTwo[i] / NUMOCTAVES) + 1, SCORETOTAL -(int)(missed * SCORETOTAL), self.Intervals.stringValue]];//print integer instead of float; integer is precise enough for this purpose
+            [self.Intervals setStringValue:[NSString stringWithFormat:@"%s%d -> %s%d (%d %%)\n%@", NOTES[mostMissedNoteOne[i] % NUMNOTES], (mostMissedNoteOne[i] / NUMNOTES) + 1, NOTES[mostMissedNoteTwo[i] % NUMNOTES], (mostMissedNoteTwo[i] / NUMNOTES) + 1, SCORETOTAL -(int)(missed * SCORETOTAL), self.Intervals.stringValue]];//print integer instead of float; integer is precise enough for this purpose
         }
     }
 }
@@ -83,15 +84,15 @@ void initMostMissed(int* mostMissed){
 - (bool)printIntervals:(ListenScore *) input {
     [self.Intervals setStringValue: @""];
     bool perfect = true; //no missed notes
-    int mostMissedNoteOne[5]; //keeps track of indices first notes of of top 5 most missed intervals
-    int mostMissedNoteTwo[5]; //keeps track of indices first notes of of top 5 most missed intervals
-    int mostMissedNPlayed[5]; //keeps track of how often each of the most missed notes have been played
+    int mostMissedNoteOne[MISSED_ARRAY_SIZE]; //keeps track of indices first notes of of top most missed intervals
+    int mostMissedNoteTwo[MISSED_ARRAY_SIZE]; //keeps track of indices first notes of of top most missed intervals
+    int mostMissedNPlayed[MISSED_ARRAY_SIZE]; //keeps track of how often each of the most missed notes have been played
     initMostMissed(mostMissedNoteOne);
     initMostMissed(mostMissedNoteOne);
     float missed = 0.;
     for(int i = 0; i < NUMNOTES * NUMOCTAVES; i++){
         for(int l = 0; l < NUMNOTES * NUMOCTAVES; l++){
-        if(input.playedIntervals[i][l] > MISSED_ARRAY_SIZE){
+        if(input.playedIntervals[i][l] > INPUT_THRESHOLD){
             missed = (float) input.missedIntervals[i][l] / input.playedIntervals[i][l];
             if(missed > MISS_THRESHOLD){
                 for(int j = 0; j < MISSED_ARRAY_SIZE; j++){

@@ -31,6 +31,14 @@
 
 static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
+//Finds the index of the note name in the note array
+int findNoteIndex(char * noteName){
+    for(int i = 0; i < NUMNOTES; i++){
+        if(noteName == NOTES[i]) return i;
+    }
+    return -1;
+}
+
 //Creates window signal in order to reduce reading of frequencies that are not actually present
 void buildHanWindow( float *window, int size )
 {
@@ -189,23 +197,26 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
         ++(self.info.nearestNoteDelta);
     }
     self.info.nearestNoteName = self->noteNameTable[maxIndex+self.info.nearestNoteDelta];
+    printf("%s", self.info.nearestNoteName);
     float nearestNotePitch = self->notePitchTable[maxIndex+self.info.nearestNoteDelta];
     self.info.centsSharp = CENTS_SHARP_MULTIPLIER * log( self.info.freq / nearestNotePitch ) / log( 2.0 );
-    self.info.noteIndex = (maxIndex+self.info.nearestNoteDelta) % NUMNOTES;
+    self.info.noteIndex = findNoteIndex(self.info.nearestNoteName);
     [self updateInfo];
     return self.info;
 }
 
 //updates accuracy/score/other pitch information based on frequency input
 - (void) updateInfo{
-    
+        printf("%s", NOTES[self.info.noteIndex]);
         if(self.info.freq < OCTAVE_ONE_START || self.info.freq > OCTAVE_EIGHT_END) return; //return if outside of the span of the 8 octaves
-        int octave = (log(self.info.freq/OCTAVE_ONE_START)/log(2.0)) + 1; //converts from Hz to octave
-        self.info.noteIndex *= octave; //puts note in respective octave
+        int octave = (log(self.info.freq/OCTAVE_ONE_START)/log(2.0)); //converts from Hz to octave
+        self.info.noteIndex += (octave * NUMNOTES); //puts note in respective octave
+    
         self.info.playedNotes[self.info.noteIndex]++;
         if(self.info.prevNoteIndex > 0 && self.info.prevNoteIndex != self.info.noteIndex){ //if it's not the first note or the same note
             self.info.playedIntervals[self.info.prevNoteIndex][self.info.noteIndex]++;
         }
+    printf("%s", NOTES[self.info.noteIndex % NUMNOTES]);
         if(fabsf(self.info.centsSharp) < ACCURACY_THRESHOLD){
             (self.info.numAccurate)++; //Count it as an accurate pitch if it's "close enough" in the range of the accuracy threshold
         } else {
@@ -214,7 +225,7 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
                self.info.missedIntervals[self.info.prevNoteIndex][self.info.noteIndex]++;
             }
         }
-        float singleInputScore = SCORETOTAL - fabsf(self.info.centsSharp);
+        float singleInputScore = SCORETOTAL - fabsf(self.info.centsSharp) * 2;
         self.info.score += singleInputScore;
         self.info.prevNoteIndex = self.info.noteIndex;
     
