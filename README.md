@@ -1,4 +1,4 @@
-# Pitch-Accuracy-Trainer-Graphical
+# Dino-Pitch-Graphical
 Program to aid musicians with hitting pitches more accurately. Takes microphone input and scores the user based on pitch accuracy. Two scores are generated--one operates on a "hit or miss" basis; the other gives points based on degree of sharpness or flatness. The program also provides information on "problem" notes (notes that the user tends to miss) and "problem" intervals (intervals that cause the user to miss notes).
 Graphical version also includes dynamic visualization of pitch accuracy.
 
