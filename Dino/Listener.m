@@ -198,7 +198,6 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
         ++(self.info.nearestNoteDelta);
     }
     self.info.nearestNoteName = self->noteNameTable[maxIndex+self.info.nearestNoteDelta];
-    printf("%s", self.info.nearestNoteName);
     float nearestNotePitch = self->notePitchTable[maxIndex+self.info.nearestNoteDelta];
     self.info.centsSharp = CENTS_SHARP_MULTIPLIER * log( self.info.freq / nearestNotePitch ) / log( 2.0 );
     self.info.noteIndex = findNoteIndex(self.info.nearestNoteName);
@@ -208,7 +207,6 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
 
 //updates accuracy/score/other pitch information based on frequency input
 - (void) updateInfo{
-        printf("%s", NOTES[self.info.noteIndex]);
         if(self.info.freq < OCTAVE_ONE_START || self.info.freq > OCTAVE_EIGHT_END) return; //return if outside of the span of the 8 octaves
         int octave = (log(self.info.freq/OCTAVE_ONE_START)/log(2.0)); //converts from Hz to octave
         self.info.noteIndex += (octave * NUMNOTES); //puts note in respective octave
@@ -217,7 +215,6 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
         if(self.info.prevNoteIndex > 0 && self.info.prevNoteIndex != self.info.noteIndex){ //if it's not the first note or the same note
             self.info.playedIntervals[self.info.prevNoteIndex][self.info.noteIndex]++;
         }
-    printf("%s", NOTES[self.info.noteIndex % NUMNOTES]);
         if(fabsf(self.info.centsSharp) < ACCURACY_THRESHOLD){
             (self.info.numAccurate)++; //Count it as an accurate pitch if it's "close enough" in the range of the accuracy threshold
         } else {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F0689AC1BA8073800E605BF /* Screen Shot 2015-09-14 at 5.23.10 PM.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0689AA1BA8073800E605BF /* Screen Shot 2015-09-14 at 5.23.10 PM.png */; };
+		7F0689AD1BA8073800E605BF /* Screen Shot 2015-09-15 at 12.22.18 AM.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0689AB1BA8073800E605BF /* Screen Shot 2015-09-15 at 12.22.18 AM.png */; };
 		7F1EEBED1B9EBC5100EC861D /* libfft.c in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EEBEB1B9EBC5100EC861D /* libfft.c */; };
 		7F1EEBEF1B9EBD4900EC861D /* libportaudio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F1EEBEE1B9EBD4900EC861D /* libportaudio.dylib */; };
 		7F1EEC631BA2279B00EC861D /* ListenScore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EEC621BA2279B00EC861D /* ListenScore.m */; };
@@ -31,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7F0689AA1BA8073800E605BF /* Screen Shot 2015-09-14 at 5.23.10 PM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Screen Shot 2015-09-14 at 5.23.10 PM.png"; path = "../Screen Shot 2015-09-14 at 5.23.10 PM.png"; sourceTree = "<group>"; };
+		7F0689AB1BA8073800E605BF /* Screen Shot 2015-09-15 at 12.22.18 AM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Screen Shot 2015-09-15 at 12.22.18 AM.png"; path = "../Screen Shot 2015-09-15 at 12.22.18 AM.png"; sourceTree = "<group>"; };
 		7F1EEBEB1B9EBC5100EC861D /* libfft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = libfft.c; sourceTree = "<group>"; };
 		7F1EEBEC1B9EBC5100EC861D /* libfft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libfft.h; sourceTree = "<group>"; };
 		7F1EEBEE1B9EBD4900EC861D /* libportaudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libportaudio.dylib; path = ../../../../usr/local/Cellar/portaudio/19.20140130/lib/libportaudio.dylib; sourceTree = "<group>"; };
@@ -75,6 +79,8 @@
 		7FE4C8701B9E8AAD0087E0C2 = {
 			isa = PBXGroup;
 			children = (
+				7F0689AA1BA8073800E605BF /* Screen Shot 2015-09-14 at 5.23.10 PM.png */,
+				7F0689AB1BA8073800E605BF /* Screen Shot 2015-09-15 at 12.22.18 AM.png */,
 				7F1EEBEE1B9EBD4900EC861D /* libportaudio.dylib */,
 				7FB14CE41B9E9CE900F07851 /* pitch bg.png */,
 				7FE4C87B1B9E8AAD0087E0C2 /* Dino */,
@@ -220,6 +226,8 @@
 			files = (
 				7FE4C8871B9E8AAD0087E0C2 /* Images.xcassets in Resources */,
 				7FB14CE51B9E9CE900F07851 /* pitch bg.png in Resources */,
+				7F0689AC1BA8073800E605BF /* Screen Shot 2015-09-14 at 5.23.10 PM.png in Resources */,
+				7F0689AD1BA8073800E605BF /* Screen Shot 2015-09-15 at 12.22.18 AM.png in Resources */,
 				7FE4C88A1B9E8AAD0087E0C2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
