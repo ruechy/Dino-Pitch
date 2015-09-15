@@ -27,7 +27,8 @@
 #define OCTAVE_ONE_START (31.7855) //halfway between B0 and C1
 #define OCTAVE_EIGHT_END (8137.075) //halway between B8 and C9
 #define ACCURACY_THRESHOLD (10.0)
-#define SCORETOTAL (100)
+#define SCORE_TOTAL (100)
+#define SCORE_MULTIPLIER (2)
 
 static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
@@ -225,7 +226,7 @@ void initPortAudio(PaError * err, PaStreamParameters * inputParametersp, PaStrea
                self.info.missedIntervals[self.info.prevNoteIndex][self.info.noteIndex]++;
             }
         }
-        float singleInputScore = SCORETOTAL - fabsf(self.info.centsSharp) * 2;
+        float singleInputScore = SCORE_TOTAL - fabsf(self.info.centsSharp) * SCORE_MULTIPLIER;
         self.info.score += singleInputScore;
         self.info.prevNoteIndex = self.info.noteIndex;
     
