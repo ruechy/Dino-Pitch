@@ -14,6 +14,7 @@
 static char * NOTES[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
 Listener * list;
+bool button;
 
 //Initialize every index in the most missed array to -1. 
 void initMostMissed(int* mostMissed){
@@ -24,10 +25,9 @@ void initMostMissed(int* mostMissed){
 
 @implementation ViewController
 
-//Initializes a listener object when the view first loads
+//Initializes view
 - (void)viewDidLoad {
     [super viewDidLoad];
-    list = [[Listener alloc] init];
 }
 
 - (void)setRepresentedObject:(id)representedObject {
@@ -118,25 +118,34 @@ void initMostMissed(int* mostMissed){
 
 }
 
+- (void)generatePitchInfo {
+    int origin = self.Frequency.frame.origin.y;
+    if(button){
+        ListenScore * input;
+        input = [list getInput];
+        if(input.numInputs != 0){
+            float percentAccurate = (((float) input.numAccurate)/input.numInputs) * SCORETOTAL;
+            [self.Accuracy setStringValue:[NSString stringWithFormat:@"%i %%", (int)percentAccurate]]; //print integer instead of float; integer is precise enough for this purpose
+            [self.Score setStringValue:[NSString stringWithFormat:@"%i / 100", (int)(input.score/input.numInputs)]]; //print integer instead of float; integer is precise enough for this purpose
+            [self.NoteName setStringValue: [NSString stringWithFormat:@"%s", input.nearestNoteName]];
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantPast]];
+            if([self printNotes: input]) [self.Notes setStringValue:@"None! Nice job! :D"];//if this is true, it means the user didn't frequently miss any notes
+            if([self printIntervals: input]) [self.Intervals setStringValue:@"None! Nice job! :D"]; //if this is true, it means the user didn't frequently miss any intervals
+            CGRect frame = self.Frequency.frame;
+            frame.origin.y = origin + (input.centsSharp * GRAPHICAL_MULTIPLIER); //Shifts the pitch bar by degree of pitchiness
+            self.Frequency.frame = frame;
+        }
+        [self performSelector:@selector(generatePitchInfo) withObject:nil afterDelay:0.0];
+    }
+}
+
 //Listens to a single microphone input and graphically updates pitch information (closest pitch, degree of pitchiness) as well as historical data (percent accuracy of all inputs received, accuracy score, and problem notes/intervals)
 - (IBAction)Listen:(id)sender {
-    int origin = self.Frequency.frame.origin.y;
-    while(true){
-    ListenScore * input;
-    input = [list getInput];
-    if(input.numInputs != 0){
-        float percentAccurate = (((float) input.numAccurate)/input.numInputs) * SCORETOTAL;
-        [self.Accuracy setStringValue:[NSString stringWithFormat:@"%i %%", (int)percentAccurate]]; //print integer instead of float; integer is precise enough for this purpose
-        [self.Score setStringValue:[NSString stringWithFormat:@"%i / 100", (int)(input.score/input.numInputs)]]; //print integer instead of float; integer is precise enough for this purpose
-        [self.NoteName setStringValue: [NSString stringWithFormat:@"%s", input.nearestNoteName]];
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantPast]];
-        if([self printNotes: input]) [self.Notes setStringValue:@"None! Nice job! :D"];//if this is true, it means the user didn't frequently miss any notes
-        if([self printIntervals: input]) [self.Intervals setStringValue:@"None! Nice job! :D"]; //if this is true, it means the user didn't frequently miss any intervals
-        CGRect frame = self.Frequency.frame;
-        frame.origin.y = origin + (input.centsSharp * GRAPHICAL_MULTIPLIER); //Shifts the pitch bar by degree of pitchiness
-        self.Frequency.frame = frame;
-        }
-    }
+    button = !button;
+    if(button){
+        list = [[Listener alloc] init];
+        [self generatePitchInfo];
+    } 
 }
 
 
