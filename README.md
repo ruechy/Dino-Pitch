@@ -3,6 +3,7 @@ Program to aid musicians with hitting pitches more accurately. Takes microphone 
 Graphical version also includes dynamic visualization of pitch accuracy.
 
 ![alt text](SS1.png) 
+
 ![alt text](SS2.png)
 
 Built on top of guitartuner (see info on it below.)
