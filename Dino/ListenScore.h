@@ -8,14 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-#define NUMNOTES 12
-#define NUMOCTAVES 8
+#define NUMNOTES 12 //number of notes in an octave
+#define NUMOCTAVES 8 //number of octaves that are being listened for
 
 @interface ListenScore : NSObject {
-    int playedNotes[NUMNOTES * NUMOCTAVES];
-    int missedNotes[NUMNOTES * NUMOCTAVES];
-    int playedIntervals[NUMNOTES * NUMOCTAVES][NUMNOTES * NUMOCTAVES];
-    int missedIntervals[NUMNOTES * NUMOCTAVES][NUMNOTES * NUMOCTAVES];
+    //in the arrays below, the 0th index is C1 and every preceding index represents a half step up from C1
+
+    int playedNotes[NUMNOTES * NUMOCTAVES]; //Keeps track of number of each note that has been heard in the input
+    int missedNotes[NUMNOTES * NUMOCTAVES]; //Keeps track of number of each note that has been heard in the input with an inaccurate pitch
+    
+    //in the arrays below, if the array is represented by [x][y], x is the first note in the interval and y is the second
+    int playedIntervals[NUMNOTES * NUMOCTAVES][NUMNOTES * NUMOCTAVES]; //Keeps track of number of each interval that has been heard in the input
+    int missedIntervals[NUMNOTES * NUMOCTAVES][NUMNOTES * NUMOCTAVES]; //Keeps track of number of each interval that has been heard in the input with an inaccurate pitch
 }
     @property (nonatomic) int numInputs;
     @property (nonatomic) int numAccurate;
@@ -28,6 +32,9 @@
     @property (nonatomic) float freq;
 
 - (ListenScore *) init;
+
+
+//Getters for played/missed arrays
 - (int *)playedNotes;
 - (int *)missedNotes;
 - (int (*)[NUMNOTES*NUMOCTAVES])playedIntervals;
